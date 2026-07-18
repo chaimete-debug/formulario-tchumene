@@ -2,24 +2,65 @@
 <html lang="pt">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#111111">
-  <meta name="description" content="Acesso ao formulário da Igreja do Nazareno em Tchumene.">
-  <meta name="application-name" content="Nazareno Tchumene">
 
+  <meta
+    name="description"
+    content="Acesso ao formulário da Igreja do Nazareno em Tchumene."
+  >
+
+  <meta
+    name="application-name"
+    content="Nazareno Tchumene"
+  >
+
+  <!-- Configuração PWA -->
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
 
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Nazareno Tchumene">
+  <!-- Ícones -->
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="32x32"
+    href="icons/favicon-32.png"
+  >
 
-  <title>Formulário — Igreja do Nazareno em Tchumene</title>
+  <link
+    rel="apple-touch-icon"
+    sizes="180x180"
+    href="icons/apple-touch-icon.png"
+  >
+
+  <!-- Configuração para iPhone e iPad -->
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="Nazareno Tchumene"
+  >
+
+  <title>
+    Formulário — Igreja do Nazareno em Tchumene
+  </title>
 
   <style>
     :root {
       color-scheme: light;
+
       --bg: #f3f3f3;
       --card: #ffffff;
       --text: #111111;
@@ -44,19 +85,36 @@
     body {
       min-height: 100vh;
       margin: 0;
+
       padding:
         max(24px, env(safe-area-inset-top))
         max(18px, env(safe-area-inset-right))
         max(24px, env(safe-area-inset-bottom))
         max(18px, env(safe-area-inset-left));
+
       display: grid;
       place-items: center;
+
       background:
-        radial-gradient(circle at top, #ffffff 0, #f3f3f3 55%, #ebebeb 100%);
+        radial-gradient(
+          circle at top,
+          #ffffff 0,
+          #f3f3f3 55%,
+          #ebebeb 100%
+        );
+
       color: var(--text);
+
       font-family:
-        Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        Inter,
+        ui-sans-serif,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
     }
 
     main {
@@ -65,6 +123,7 @@
 
     .card {
       overflow: hidden;
+
       background: var(--card);
       border: 1px solid rgba(0, 0, 0, 0.07);
       border-radius: var(--radius);
@@ -78,14 +137,18 @@
 
     .brand img {
       display: block;
+
       width: min(100%, 360px);
       height: auto;
+
       margin: 0 auto 18px;
     }
 
     .eyebrow {
       margin: 0 0 7px;
+
       color: var(--muted);
+
       font-size: 0.78rem;
       font-weight: 700;
       letter-spacing: 0.13em;
@@ -94,14 +157,17 @@
 
     h1 {
       margin: 0;
+
       font-size: clamp(1.55rem, 5vw, 2.15rem);
       line-height: 1.12;
     }
 
     .subtitle {
-      margin: 12px auto 0;
       max-width: 390px;
+      margin: 12px auto 0;
+
       color: var(--muted);
+
       font-size: 1rem;
       line-height: 1.55;
     }
@@ -109,6 +175,7 @@
     .actions {
       display: grid;
       gap: 12px;
+
       padding: 8px 28px 28px;
     }
 
@@ -116,19 +183,28 @@
     .button {
       width: 100%;
       min-height: 54px;
-      border: 1px solid var(--primary);
-      border-radius: 14px;
+
       padding: 14px 18px;
+
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+
+      border: 1px solid var(--primary);
+      border-radius: 14px;
+
       font: inherit;
       font-weight: 750;
       text-align: center;
       text-decoration: none;
+
       cursor: pointer;
-      transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+
+      transition:
+        transform 120ms ease,
+        box-shadow 120ms ease,
+        opacity 120ms ease;
     }
 
     button:active,
@@ -139,6 +215,7 @@
     .primary {
       background: var(--primary);
       color: var(--primary-text);
+
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
     }
 
@@ -153,8 +230,13 @@
 
     .instructions {
       padding: 20px 28px 26px;
+
       border-top: 1px solid var(--border);
       background: #fafafa;
+    }
+
+    .instructions[hidden] {
+      display: none;
     }
 
     .instructions h2 {
@@ -164,7 +246,9 @@
 
     .instructions p {
       margin: 8px 0;
+
       color: var(--muted);
+
       font-size: 0.92rem;
       line-height: 1.5;
     }
@@ -176,7 +260,9 @@
     .status {
       min-height: 22px;
       margin: 2px 0 0;
+
       color: var(--muted);
+
       font-size: 0.88rem;
       text-align: center;
     }
@@ -185,9 +271,12 @@
       position: fixed;
       inset: 0;
       z-index: 1000;
+
       padding: 24px;
+
       display: grid;
       place-items: center;
+
       background: rgba(0, 0, 0, 0.58);
     }
 
@@ -197,9 +286,12 @@
 
     .modal-box {
       width: min(100%, 440px);
+
       padding: 24px;
+
       background: #ffffff;
       border-radius: 20px;
+
       box-shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
     }
 
@@ -210,12 +302,15 @@
     .modal-box ol {
       margin: 0 0 20px;
       padding-left: 22px;
+
       line-height: 1.65;
     }
 
     .footer {
       margin: 16px 0 0;
+
       color: #777777;
+
       font-size: 0.8rem;
       text-align: center;
     }
@@ -233,24 +328,44 @@
 
 <body>
   <main>
-    <section class="card" aria-labelledby="page-title">
+
+    <section
+      class="card"
+      aria-labelledby="page-title"
+    >
+
       <div class="brand">
+
         <img
           src="emblema-completo.png"
           alt="Emblema da Igreja do Nazareno"
           width="909"
           height="682"
         >
-        <p class="eyebrow">Igreja do Nazareno em Tchumene</p>
-        <h1 id="page-title">Formulário da Igreja</h1>
-        <p class="subtitle">
-          Instale este acesso no ecrã principal do telefone ou abra directamente
-          o formulário KoboToolbox.
+
+        <p class="eyebrow">
+          Igreja do Nazareno em Tchumene
         </p>
+
+        <h1 id="page-title">
+          Formulário da Igreja
+        </h1>
+
+        <p class="subtitle">
+          Instale este acesso no ecrã principal do telefone
+          ou abra directamente o formulário KoboToolbox.
+        </p>
+
       </div>
 
       <div class="actions">
-        <button id="install-button" class="install primary" type="button" hidden>
+
+        <button
+          id="install-button"
+          class="install primary"
+          type="button"
+          hidden
+        >
           <span aria-hidden="true">⬇</span>
           Instalar no telefone
         </button>
@@ -264,117 +379,319 @@
           Abrir formulário
         </a>
 
-        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <p
+          id="status"
+          class="status"
+          role="status"
+          aria-live="polite"
+        ></p>
+
       </div>
 
-      <div class="instructions">
-        <h2>Adicionar ao ecrã principal</h2>
+      <!--
+        Esta secção aparece apenas antes da instalação.
+        Quando a aplicação estiver instalada e for aberta pelo ícone,
+        o JavaScript irá ocultá-la.
+      -->
+      <div
+        id="install-instructions"
+        class="instructions"
+      >
+
+        <h2>
+          Adicionar ao ecrã principal
+        </h2>
+
         <p>
-          <strong>Android:</strong> use o botão “Instalar no telefone”.
-          Quando o botão não aparecer, abra o menu do navegador e seleccione
-          “Instalar aplicação” ou “Adicionar ao ecrã principal”.
+          <strong>Android:</strong>
+          use o botão “Instalar no telefone”.
+          Quando o botão não aparecer, abra o menu do navegador
+          e seleccione “Instalar aplicação” ou
+          “Adicionar ao ecrã principal”.
         </p>
+
         <p>
-          <strong>iPhone/iPad:</strong> abra esta página no Safari, toque em
-          “Partilhar” e depois em “Adicionar ao ecrã principal”.
+          <strong>iPhone/iPad:</strong>
+          abra esta página no Safari, toque em “Partilhar”
+          e depois em “Adicionar ao ecrã principal”.
         </p>
+
       </div>
+
     </section>
 
     <p class="footer">
       Igreja do Nazareno em Tchumene
     </p>
+
   </main>
 
-  <div id="ios-modal" class="modal" hidden>
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="ios-title">
-      <h2 id="ios-title">Instalar no iPhone ou iPad</h2>
+  <!-- Janela de instruções para iPhone e iPad -->
+  <div
+    id="ios-modal"
+    class="modal"
+    hidden
+  >
+
+    <div
+      class="modal-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="ios-title"
+    >
+
+      <h2 id="ios-title">
+        Instalar no iPhone ou iPad
+      </h2>
+
       <ol>
-        <li>Abra esta página no Safari.</li>
-        <li>Toque no botão “Partilhar”.</li>
-        <li>Seleccione “Adicionar ao ecrã principal”.</li>
-        <li>Confirme em “Adicionar”.</li>
+        <li>
+          Abra esta página no Safari.
+        </li>
+
+        <li>
+          Toque no botão “Partilhar”.
+        </li>
+
+        <li>
+          Seleccione “Adicionar ao ecrã principal”.
+        </li>
+
+        <li>
+          Confirme em “Adicionar”.
+        </li>
       </ol>
-      <button id="close-modal" class="primary" type="button">Entendido</button>
+
+      <button
+        id="close-modal"
+        class="primary"
+        type="button"
+      >
+        Entendido
+      </button>
+
     </div>
+
   </div>
 
   <script>
-    const installButton = document.getElementById("install-button");
-    const statusText = document.getElementById("status");
-    const iosModal = document.getElementById("ios-modal");
-    const closeModal = document.getElementById("close-modal");
+    const installButton =
+      document.getElementById("install-button");
+
+    const statusText =
+      document.getElementById("status");
+
+    const instructionsBox =
+      document.getElementById("install-instructions");
+
+    const iosModal =
+      document.getElementById("ios-modal");
+
+    const closeModal =
+      document.getElementById("close-modal");
 
     let deferredInstallPrompt = null;
 
-    const isStandalone =
-      window.matchMedia("(display-mode: standalone)").matches ||
-      window.navigator.standalone === true;
-
-    const isIOS =
-      /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-
-    window.addEventListener("beforeinstallprompt", (event) => {
-      event.preventDefault();
-      deferredInstallPrompt = event;
-
-      if (!isStandalone) {
-        installButton.hidden = false;
-      }
-    });
-
-    installButton.addEventListener("click", async () => {
-      if (isIOS) {
-        iosModal.hidden = false;
-        return;
-      }
-
-      if (!deferredInstallPrompt) {
-        statusText.textContent =
-          "Use o menu do navegador e escolha “Instalar aplicação” ou “Adicionar ao ecrã principal”.";
-        return;
-      }
-
-      deferredInstallPrompt.prompt();
-      const choice = await deferredInstallPrompt.userChoice;
-
-      if (choice.outcome === "accepted") {
-        statusText.textContent = "Instalação aceite.";
-      }
-
-      deferredInstallPrompt = null;
-      installButton.hidden = true;
-    });
-
-    window.addEventListener("appinstalled", () => {
-      statusText.textContent = "Aplicação instalada no telefone.";
-      installButton.hidden = true;
-      deferredInstallPrompt = null;
-    });
-
-    closeModal.addEventListener("click", () => {
-      iosModal.hidden = true;
-    });
-
-    iosModal.addEventListener("click", (event) => {
-      if (event.target === iosModal) {
-        iosModal.hidden = true;
-      }
-    });
-
-    if (isStandalone) {
-      installButton.hidden = true;
-      statusText.textContent = "Aplicação instalada.";
-    } else if (isIOS) {
-      installButton.hidden = false;
+    /*
+     * Detecta se a página está a ser executada como aplicação
+     * instalada, em modo standalone.
+     */
+    function isApplicationInstalled() {
+      return (
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true
+      );
     }
 
+    /*
+     * Detecta iPhone, iPad ou iPod.
+     */
+    function isIOSDevice() {
+      return /iphone|ipad|ipod/i.test(
+        window.navigator.userAgent
+      );
+    }
+
+    /*
+     * Aplica o estado visual correspondente a uma aplicação
+     * já instalada.
+     *
+     * Mantém a mensagem "Aplicação instalada."
+     * e remove as instruções de instalação.
+     */
+    function applyInstalledState() {
+      installButton.hidden = true;
+      instructionsBox.hidden = true;
+      statusText.textContent = "Aplicação instalada.";
+    }
+
+    /*
+     * Aplica o estado normal apresentado antes da instalação.
+     */
+    function applyBrowserState() {
+      instructionsBox.hidden = false;
+
+      if (isIOSDevice()) {
+        installButton.hidden = false;
+      }
+    }
+
+    /*
+     * Evento apresentado pelos navegadores compatíveis
+     * quando a PWA está pronta para instalação.
+     */
+    window.addEventListener(
+      "beforeinstallprompt",
+      function (event) {
+        event.preventDefault();
+
+        deferredInstallPrompt = event;
+
+        if (!isApplicationInstalled()) {
+          installButton.hidden = false;
+          instructionsBox.hidden = false;
+        }
+      }
+    );
+
+    /*
+     * Clique no botão "Instalar no telefone".
+     */
+    installButton.addEventListener(
+      "click",
+      async function () {
+
+        /*
+         * O iPhone não apresenta o diálogo automático de instalação.
+         * Por isso, são apresentadas instruções próprias.
+         */
+        if (isIOSDevice()) {
+          iosModal.hidden = false;
+          return;
+        }
+
+        /*
+         * Quando o navegador não disponibiliza o diálogo automático,
+         * o utilizador deve usar o menu do navegador.
+         */
+        if (!deferredInstallPrompt) {
+          statusText.textContent =
+            "Use o menu do navegador e escolha " +
+            "“Instalar aplicação” ou " +
+            "“Adicionar ao ecrã principal”.";
+
+          return;
+        }
+
+        /*
+         * Apresenta o diálogo de instalação do navegador.
+         */
+        deferredInstallPrompt.prompt();
+
+        const choice =
+          await deferredInstallPrompt.userChoice;
+
+        if (choice.outcome === "accepted") {
+          statusText.textContent =
+            "Instalação aceite. Abra a aplicação pelo ícone criado no telefone.";
+        }
+
+        deferredInstallPrompt = null;
+        installButton.hidden = true;
+      }
+    );
+
+    /*
+     * Executado quando o navegador confirma que a aplicação
+     * foi instalada.
+     */
+    window.addEventListener(
+      "appinstalled",
+      function () {
+        deferredInstallPrompt = null;
+        applyInstalledState();
+      }
+    );
+
+    /*
+     * Fecha a janela de instruções do iPhone/iPad.
+     */
+    closeModal.addEventListener(
+      "click",
+      function () {
+        iosModal.hidden = true;
+      }
+    );
+
+    /*
+     * Fecha a janela quando o utilizador toca fora da caixa.
+     */
+    iosModal.addEventListener(
+      "click",
+      function (event) {
+        if (event.target === iosModal) {
+          iosModal.hidden = true;
+        }
+      }
+    );
+
+    /*
+     * Estado inicial da página.
+     */
+    if (isApplicationInstalled()) {
+      applyInstalledState();
+    } else {
+      applyBrowserState();
+    }
+
+    /*
+     * Detecta alterações no modo de apresentação.
+     * Isto melhora o comportamento em navegadores que alteram
+     * dinamicamente para o modo standalone.
+     */
+    const standaloneMediaQuery =
+      window.matchMedia("(display-mode: standalone)");
+
+    function handleDisplayModeChange(event) {
+      if (event.matches) {
+        applyInstalledState();
+      }
+    }
+
+    if (
+      typeof standaloneMediaQuery.addEventListener ===
+      "function"
+    ) {
+      standaloneMediaQuery.addEventListener(
+        "change",
+        handleDisplayModeChange
+      );
+    } else if (
+      typeof standaloneMediaQuery.addListener ===
+      "function"
+    ) {
+      standaloneMediaQuery.addListener(
+        handleDisplayModeChange
+      );
+    }
+
+    /*
+     * Registo do Service Worker.
+     */
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("service-worker.js")
-          .catch((error) => console.error("Service Worker:", error));
-      });
+      window.addEventListener(
+        "load",
+        function () {
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .catch(function (error) {
+              console.error(
+                "Erro no Service Worker:",
+                error
+              );
+            });
+        }
+      );
     }
   </script>
 </body>
