@@ -131,7 +131,7 @@
     }
 
     .brand {
-      padding: 26px 28px 18px;
+      padding: 26px 28px 20px;
       text-align: center;
     }
 
@@ -162,21 +162,11 @@
       line-height: 1.12;
     }
 
-    .subtitle {
-      max-width: 390px;
-      margin: 12px auto 0;
-
-      color: var(--muted);
-
-      font-size: 1rem;
-      line-height: 1.55;
-    }
-
     .actions {
       display: grid;
       gap: 12px;
 
-      padding: 8px 28px 28px;
+      padding: 12px 28px 28px;
     }
 
     button,
@@ -351,11 +341,6 @@
           Formulário da Igreja
         </h1>
 
-        <p class="subtitle">
-          Instale este acesso no ecrã principal do telefone
-          ou abra directamente o formulário KoboToolbox.
-        </p>
-
       </div>
 
       <div class="actions">
@@ -493,8 +478,7 @@
     let deferredInstallPrompt = null;
 
     /*
-     * Detecta se a página está a ser executada como aplicação
-     * instalada, em modo standalone.
+     * Verifica se a página foi aberta como aplicação instalada.
      */
     function isApplicationInstalled() {
       return (
@@ -504,7 +488,7 @@
     }
 
     /*
-     * Detecta iPhone, iPad ou iPod.
+     * Verifica se o equipamento é um iPhone, iPad ou iPod.
      */
     function isIOSDevice() {
       return /iphone|ipad|ipod/i.test(
@@ -513,11 +497,10 @@
     }
 
     /*
-     * Aplica o estado visual correspondente a uma aplicação
-     * já instalada.
+     * Estado apresentado quando a PWA já está instalada.
      *
      * Mantém a mensagem "Aplicação instalada."
-     * e remove as instruções de instalação.
+     * e remove todas as instruções de instalação.
      */
     function applyInstalledState() {
       installButton.hidden = true;
@@ -526,10 +509,12 @@
     }
 
     /*
-     * Aplica o estado normal apresentado antes da instalação.
+     * Estado apresentado quando a página é aberta
+     * directamente no navegador.
      */
     function applyBrowserState() {
       instructionsBox.hidden = false;
+      statusText.textContent = "";
 
       if (isIOSDevice()) {
         installButton.hidden = false;
@@ -537,8 +522,7 @@
     }
 
     /*
-     * Evento apresentado pelos navegadores compatíveis
-     * quando a PWA está pronta para instalação.
+     * O navegador informa que a PWA pode ser instalada.
      */
     window.addEventListener(
       "beforeinstallprompt",
@@ -562,8 +546,8 @@
       async function () {
 
         /*
-         * O iPhone não apresenta o diálogo automático de instalação.
-         * Por isso, são apresentadas instruções próprias.
+         * No iPhone e iPad, a instalação é feita
+         * através do menu Partilhar do Safari.
          */
         if (isIOSDevice()) {
           iosModal.hidden = false;
@@ -571,8 +555,8 @@
         }
 
         /*
-         * Quando o navegador não disponibiliza o diálogo automático,
-         * o utilizador deve usar o menu do navegador.
+         * Quando o navegador não disponibiliza
+         * o diálogo automático de instalação.
          */
         if (!deferredInstallPrompt) {
           statusText.textContent =
@@ -583,9 +567,6 @@
           return;
         }
 
-        /*
-         * Apresenta o diálogo de instalação do navegador.
-         */
         deferredInstallPrompt.prompt();
 
         const choice =
@@ -602,8 +583,8 @@
     );
 
     /*
-     * Executado quando o navegador confirma que a aplicação
-     * foi instalada.
+     * Executado quando o navegador confirma
+     * que a aplicação foi instalada.
      */
     window.addEventListener(
       "appinstalled",
@@ -624,7 +605,8 @@
     );
 
     /*
-     * Fecha a janela quando o utilizador toca fora da caixa.
+     * Fecha a janela quando o utilizador toca
+     * fora da caixa de instruções.
      */
     iosModal.addEventListener(
       "click",
@@ -636,7 +618,7 @@
     );
 
     /*
-     * Estado inicial da página.
+     * Define o estado inicial da página.
      */
     if (isApplicationInstalled()) {
       applyInstalledState();
@@ -645,9 +627,7 @@
     }
 
     /*
-     * Detecta alterações no modo de apresentação.
-     * Isto melhora o comportamento em navegadores que alteram
-     * dinamicamente para o modo standalone.
+     * Detecta alterações para o modo standalone.
      */
     const standaloneMediaQuery =
       window.matchMedia("(display-mode: standalone)");
