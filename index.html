@@ -171,7 +171,7 @@
     button,
     .button {
       width: 100%;
-      min-height: 58px;
+      min-height: 60px;
 
       padding: 15px 18px;
 
@@ -184,7 +184,7 @@
       border-radius: 14px;
 
       font: inherit;
-      font-size: 1rem;
+      font-size: 1.04rem;
       font-weight: 750;
       text-align: center;
       text-decoration: none;
@@ -247,8 +247,8 @@
 
       button,
       .button {
-        min-height: 60px;
-        font-size: 1.04rem;
+        min-height: 62px;
+        font-size: 1.06rem;
       }
     }
   </style>
@@ -319,17 +319,28 @@
   </main>
 
   <script>
+    /*
+     * Endereço público da PWA.
+     */
+    const PUBLIC_APP_URL =
+      "https://formulario-tchumene.vercel.app/";
+
+    /*
+     * Elementos da página.
+     */
     const installButton =
       document.getElementById("install-button");
 
     const statusText =
       document.getElementById("status");
 
+    /*
+     * Pedido de instalação fornecido pelo navegador.
+     */
     let deferredInstallPrompt = null;
 
     /*
-     * Verifica se a página está a ser executada
-     * como aplicação instalada.
+     * Verifica se a página foi aberta como aplicação instalada.
      */
     function isApplicationInstalled() {
       return (
@@ -339,19 +350,125 @@
     }
 
     /*
-     * Estado da aplicação já instalada.
+     * Verifica se está a ser usado o Samsung Internet.
      */
-    function applyInstalledState() {
-      installButton.hidden = true;
-      statusText.textContent = "Aplicação instalada.";
+    function isSamsungInternet() {
+      return /SamsungBrowser/i.test(
+        window.navigator.userAgent
+      );
     }
 
     /*
-     * Estado normal no navegador.
+     * Verifica se o dispositivo utiliza Android.
+     */
+    function isAndroidDevice() {
+      return /Android/i.test(
+        window.navigator.userAgent
+      );
+    }
+
+    /*
+     * Cria o endereço especial que abre esta página
+     * directamente no Google Chrome.
+     *
+     * Caso o Chrome não esteja disponível, o navegador
+     * regressa à página com o parâmetro chrome=indisponivel.
+     */
+    function buildChromeIntentUrl() {
+      const fallbackUrl =
+        encodeURIComponent(
+          PUBLIC_APP_URL + "?chrome=indisponivel"
+        );
+
+      return (
+        "intent://formulario-tchumene.vercel.app/" +
+        "#Intent;" +
+        "scheme=https;" +
+        "package=com.android.chrome;" +
+        "action=android.intent.action.VIEW;" +
+        "category=android.intent.category.BROWSABLE;" +
+        "S.browser_fallback_url=" +
+        fallbackUrl +
+        ";" +
+        "end;"
+      );
+    }
+
+    /*
+     * Abre a PWA no Google Chrome.
+     */
+    function openPageInChrome() {
+      statusText.textContent = "A abrir...";
+
+      window.location.href =
+        buildChromeIntentUrl();
+    }
+
+    /*
+     * Aguarda brevemente pelo pedido de instalação.
+     *
+     * Em alguns telefones, o pedido pode demorar alguns
+     * segundos depois de a página abrir.
+     */
+    function waitForInstallPrompt(timeoutMilliseconds) {
+      return new Promise(function (resolve) {
+        if (deferredInstallPrompt) {
+          resolve(deferredInstallPrompt);
+          return;
+        }
+
+        const startTime = Date.now();
+
+        const interval = window.setInterval(
+          function () {
+            if (deferredInstallPrompt) {
+              window.clearInterval(interval);
+              resolve(deferredInstallPrompt);
+              return;
+            }
+
+            if (
+              Date.now() - startTime >=
+              timeoutMilliseconds
+            ) {
+              window.clearInterval(interval);
+              resolve(null);
+            }
+          },
+          100
+        );
+      });
+    }
+
+    /*
+     * Apresenta o estado da aplicação instalada.
+     */
+    function applyInstalledState() {
+      installButton.hidden = true;
+
+      statusText.textContent =
+        "Aplicação instalada.";
+    }
+
+    /*
+     * Apresenta o estado normal no navegador.
      */
     function applyBrowserState() {
       installButton.hidden = false;
-      statusText.textContent = "";
+
+      const parameters =
+        new URLSearchParams(window.location.search);
+
+      const chromeUnavailable =
+        parameters.get("chrome") ===
+        "indisponivel";
+
+      if (chromeUnavailable) {
+        statusText.textContent =
+          "Não foi possível instalar. Use “Abrir formulário”.";
+      } else {
+        statusText.textContent = "";
+      }
     }
 
     /*
@@ -367,22 +484,45 @@
 
         if (!isApplicationInstalled()) {
           installButton.hidden = false;
+          statusText.textContent = "";
         }
       }
     );
 
     /*
-     * Botão de instalação.
+     * Clique no botão "Instalar no telefone".
      */
     installButton.addEventListener(
       "click",
       async function () {
 
         /*
-         * Alguns navegadores não fornecem
-         * instalação automática.
+         * No Samsung Internet, abre a mesma página
+         * no Google Chrome.
          */
-        if (!deferredInstallPrompt) {
+        if (
+          isSamsungInternet() &&
+          isAndroidDevice()
+        ) {
+          openPageInChrome();
+          return;
+        }
+
+        /*
+         * Aguarda até três segundos pelo pedido
+         * de instalação do navegador.
+         */
+        statusText.textContent =
+          "A preparar instalação...";
+
+        const installPrompt =
+          deferredInstallPrompt ||
+          await waitForInstallPrompt(3000);
+
+        /*
+         * Quando o navegador não permite a instalação.
+         */
+        if (!installPrompt) {
           statusText.textContent =
             "Não foi possível instalar. Use “Abrir formulário”.";
 
@@ -390,14 +530,16 @@
         }
 
         try {
-          deferredInstallPrompt.prompt();
+          installPrompt.prompt();
 
           const choice =
-            await deferredInstallPrompt.userChoice;
+            await installPrompt.userChoice;
 
           if (choice.outcome === "accepted") {
             statusText.textContent =
               "Aplicação instalada.";
+
+            installButton.hidden = true;
           } else {
             statusText.textContent =
               "Use “Abrir formulário”.";
@@ -429,7 +571,7 @@
     );
 
     /*
-     * Estado inicial.
+     * Define o estado inicial.
      */
     if (isApplicationInstalled()) {
       applyInstalledState();
@@ -438,10 +580,12 @@
     }
 
     /*
-     * Detecta mudança para o modo instalado.
+     * Detecta a passagem para o modo instalado.
      */
     const standaloneMediaQuery =
-      window.matchMedia("(display-mode: standalone)");
+      window.matchMedia(
+        "(display-mode: standalone)"
+      );
 
     function handleDisplayModeChange(event) {
       if (event.matches) {
@@ -468,13 +612,16 @@
 
     /*
      * Registo do Service Worker.
+     *
+     * O parâmetro v=4 ajuda o navegador a reconhecer
+     * esta versão actualizada.
      */
     if ("serviceWorker" in navigator) {
       window.addEventListener(
         "load",
         function () {
           navigator.serviceWorker
-            .register("service-worker.js")
+            .register("service-worker.js?v=4")
             .catch(function (error) {
               console.error(
                 "Erro no Service Worker:",
