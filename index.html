@@ -12,7 +12,7 @@
 
   <meta
     name="description"
-    content="Acesso ao formulário da Igreja do Nazareno em Tchumene."
+    content="Formulário da Igreja do Nazareno em Tchumene."
   >
 
   <meta
@@ -20,8 +20,10 @@
     content="Nazareno Tchumene"
   >
 
+  <!-- Manifesto da PWA -->
   <link rel="manifest" href="manifest.webmanifest">
 
+  <!-- Ícones -->
   <link
     rel="icon"
     type="image/png"
@@ -35,6 +37,7 @@
     href="icons/apple-touch-icon.png"
   >
 
+  <!-- Configuração para iPhone e iPad -->
   <meta
     name="apple-mobile-web-app-capable"
     content="yes"
@@ -62,13 +65,9 @@
       --card: #ffffff;
       --text: #111111;
       --muted: #666666;
-      --border: #dddddd;
       --primary: #111111;
       --primary-text: #ffffff;
       --secondary: #ffffff;
-      --warning-bg: #fff7df;
-      --warning-border: #d8a500;
-      --warning-text: #533f00;
       --shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
       --radius: 24px;
     }
@@ -164,17 +163,17 @@
 
     .actions {
       display: grid;
-      gap: 12px;
+      gap: 14px;
 
-      padding: 12px 28px 28px;
+      padding: 14px 28px 30px;
     }
 
     button,
     .button {
       width: 100%;
-      min-height: 54px;
+      min-height: 58px;
 
-      padding: 14px 18px;
+      padding: 15px 18px;
 
       display: inline-flex;
       align-items: center;
@@ -185,6 +184,7 @@
       border-radius: 14px;
 
       font: inherit;
+      font-size: 1rem;
       font-weight: 750;
       text-align: center;
       text-decoration: none;
@@ -214,112 +214,19 @@
       color: var(--text);
     }
 
-    .install[hidden] {
-      display: none;
-    }
-
-    .browser-warning {
-      padding: 16px 17px;
-
-      border: 1px solid var(--warning-border);
-      border-radius: 14px;
-
-      background: var(--warning-bg);
-      color: var(--warning-text);
-
-      font-size: 0.92rem;
-      line-height: 1.55;
-      text-align: left;
-    }
-
-    .browser-warning[hidden] {
-      display: none;
-    }
-
-    .browser-warning strong {
-      display: block;
-      margin-bottom: 5px;
-
-      color: #332800;
-      font-size: 0.98rem;
-    }
-
-    .instructions {
-      padding: 20px 28px 26px;
-
-      border-top: 1px solid var(--border);
-      background: #fafafa;
-    }
-
-    .instructions[hidden] {
-      display: none;
-    }
-
-    .instructions h2 {
-      margin: 0 0 12px;
-      font-size: 1rem;
-    }
-
-    .instructions p {
-      margin: 8px 0;
-
-      color: var(--muted);
-
-      font-size: 0.92rem;
-      line-height: 1.5;
-    }
-
-    .instructions strong {
-      color: var(--text);
+    [hidden] {
+      display: none !important;
     }
 
     .status {
-      min-height: 22px;
+      min-height: 24px;
       margin: 2px 0 0;
 
       color: var(--muted);
 
-      font-size: 0.88rem;
+      font-size: 0.92rem;
+      line-height: 1.45;
       text-align: center;
-    }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-
-      padding: 24px;
-
-      display: grid;
-      place-items: center;
-
-      background: rgba(0, 0, 0, 0.58);
-    }
-
-    .modal[hidden] {
-      display: none;
-    }
-
-    .modal-box {
-      width: min(100%, 440px);
-
-      padding: 24px;
-
-      background: #ffffff;
-      border-radius: 20px;
-
-      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.28);
-    }
-
-    .modal-box h2 {
-      margin: 0 0 12px;
-    }
-
-    .modal-box ol {
-      margin: 0 0 20px;
-      padding-left: 22px;
-
-      line-height: 1.65;
     }
 
     .footer {
@@ -333,10 +240,15 @@
 
     @media (max-width: 420px) {
       .brand,
-      .actions,
-      .instructions {
+      .actions {
         padding-left: 20px;
         padding-right: 20px;
+      }
+
+      button,
+      .button {
+        min-height: 60px;
+        font-size: 1.04rem;
       }
     }
   </style>
@@ -373,30 +285,12 @@
 
         <button
           id="install-button"
-          class="install primary"
+          class="primary"
           type="button"
-          hidden
         >
           <span aria-hidden="true">⬇</span>
           Instalar no telefone
         </button>
-
-        <div
-          id="samsung-warning"
-          class="browser-warning"
-          role="alert"
-          hidden
-        >
-          <strong>
-            Instalação pelo Google Chrome
-          </strong>
-
-          Para evitar avisos de segurança do Google Play Protect,
-          abra esta página no Google Chrome.
-
-          No Chrome, toque nos três pontos e seleccione
-          “Instalar aplicação” ou “Adicionar ao ecrã principal”.
-        </div>
 
         <a
           id="open-form"
@@ -416,33 +310,6 @@
 
       </div>
 
-      <div
-        id="install-instructions"
-        class="instructions"
-      >
-
-        <h2>
-          Adicionar ao ecrã principal
-        </h2>
-
-        <p>
-          <strong>Android:</strong>
-          abra esta página no Google Chrome e use o botão
-          “Instalar no telefone”.
-
-          Quando o botão não aparecer, abra o menu do Chrome
-          e seleccione “Instalar aplicação” ou
-          “Adicionar ao ecrã principal”.
-        </p>
-
-        <p>
-          <strong>iPhone/iPad:</strong>
-          abra esta página no Safari, toque em “Partilhar”
-          e depois em “Adicionar ao ecrã principal”.
-        </p>
-
-      </div>
-
     </section>
 
     <p class="footer">
@@ -451,53 +318,6 @@
 
   </main>
 
-  <div
-    id="ios-modal"
-    class="modal"
-    hidden
-  >
-
-    <div
-      class="modal-box"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="ios-title"
-    >
-
-      <h2 id="ios-title">
-        Instalar no iPhone ou iPad
-      </h2>
-
-      <ol>
-        <li>
-          Abra esta página no Safari.
-        </li>
-
-        <li>
-          Toque no botão “Partilhar”.
-        </li>
-
-        <li>
-          Seleccione “Adicionar ao ecrã principal”.
-        </li>
-
-        <li>
-          Confirme em “Adicionar”.
-        </li>
-      </ol>
-
-      <button
-        id="close-modal"
-        class="primary"
-        type="button"
-      >
-        Entendido
-      </button>
-
-    </div>
-
-  </div>
-
   <script>
     const installButton =
       document.getElementById("install-button");
@@ -505,20 +325,12 @@
     const statusText =
       document.getElementById("status");
 
-    const instructionsBox =
-      document.getElementById("install-instructions");
-
-    const samsungWarning =
-      document.getElementById("samsung-warning");
-
-    const iosModal =
-      document.getElementById("ios-modal");
-
-    const closeModal =
-      document.getElementById("close-modal");
-
     let deferredInstallPrompt = null;
 
+    /*
+     * Verifica se a página está a ser executada
+     * como aplicação instalada.
+     */
     function isApplicationInstalled() {
       return (
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -526,47 +338,26 @@
       );
     }
 
-    function isIOSDevice() {
-      return /iphone|ipad|ipod/i.test(
-        window.navigator.userAgent
-      );
-    }
-
-    function isSamsungInternet() {
-      return /SamsungBrowser/i.test(
-        window.navigator.userAgent
-      );
-    }
-
+    /*
+     * Estado da aplicação já instalada.
+     */
     function applyInstalledState() {
       installButton.hidden = true;
-      instructionsBox.hidden = true;
-      samsungWarning.hidden = true;
-
-      statusText.textContent =
-        "Aplicação instalada.";
+      statusText.textContent = "Aplicação instalada.";
     }
 
-    function applySamsungBrowserState() {
-      installButton.hidden = true;
-      instructionsBox.hidden = true;
-      samsungWarning.hidden = false;
-
+    /*
+     * Estado normal no navegador.
+     */
+    function applyBrowserState() {
+      installButton.hidden = false;
       statusText.textContent = "";
     }
 
-    function applyNormalBrowserState() {
-      samsungWarning.hidden = true;
-      instructionsBox.hidden = false;
-      statusText.textContent = "";
-
-      if (isIOSDevice()) {
-        installButton.hidden = false;
-      } else {
-        installButton.hidden = true;
-      }
-    }
-
+    /*
+     * Guarda o pedido de instalação fornecido
+     * pelo navegador.
+     */
     window.addEventListener(
       "beforeinstallprompt",
       function (event) {
@@ -574,55 +365,61 @@
 
         deferredInstallPrompt = event;
 
-        if (
-          !isApplicationInstalled() &&
-          !isSamsungInternet()
-        ) {
+        if (!isApplicationInstalled()) {
           installButton.hidden = false;
-          instructionsBox.hidden = false;
-          samsungWarning.hidden = true;
         }
       }
     );
 
+    /*
+     * Botão de instalação.
+     */
     installButton.addEventListener(
       "click",
       async function () {
 
-        if (isSamsungInternet()) {
-          applySamsungBrowserState();
-          return;
-        }
-
-        if (isIOSDevice()) {
-          iosModal.hidden = false;
-          return;
-        }
-
+        /*
+         * Alguns navegadores não fornecem
+         * instalação automática.
+         */
         if (!deferredInstallPrompt) {
           statusText.textContent =
-            "Use o menu do Google Chrome e escolha " +
-            "“Instalar aplicação” ou " +
-            "“Adicionar ao ecrã principal”.";
+            "Não foi possível instalar. Use “Abrir formulário”.";
 
           return;
         }
 
-        deferredInstallPrompt.prompt();
+        try {
+          deferredInstallPrompt.prompt();
 
-        const choice =
-          await deferredInstallPrompt.userChoice;
+          const choice =
+            await deferredInstallPrompt.userChoice;
 
-        if (choice.outcome === "accepted") {
+          if (choice.outcome === "accepted") {
+            statusText.textContent =
+              "Aplicação instalada.";
+          } else {
+            statusText.textContent =
+              "Use “Abrir formulário”.";
+          }
+
+        } catch (error) {
+          console.error(
+            "Erro durante a instalação:",
+            error
+          );
+
           statusText.textContent =
-            "Instalação aceite. Abra a aplicação pelo ícone criado no telefone.";
+            "Não foi possível instalar. Use “Abrir formulário”.";
         }
 
         deferredInstallPrompt = null;
-        installButton.hidden = true;
       }
     );
 
+    /*
+     * Confirmação da instalação.
+     */
     window.addEventListener(
       "appinstalled",
       function () {
@@ -631,30 +428,18 @@
       }
     );
 
-    closeModal.addEventListener(
-      "click",
-      function () {
-        iosModal.hidden = true;
-      }
-    );
-
-    iosModal.addEventListener(
-      "click",
-      function (event) {
-        if (event.target === iosModal) {
-          iosModal.hidden = true;
-        }
-      }
-    );
-
+    /*
+     * Estado inicial.
+     */
     if (isApplicationInstalled()) {
       applyInstalledState();
-    } else if (isSamsungInternet()) {
-      applySamsungBrowserState();
     } else {
-      applyNormalBrowserState();
+      applyBrowserState();
     }
 
+    /*
+     * Detecta mudança para o modo instalado.
+     */
     const standaloneMediaQuery =
       window.matchMedia("(display-mode: standalone)");
 
@@ -681,6 +466,9 @@
       );
     }
 
+    /*
+     * Registo do Service Worker.
+     */
     if ("serviceWorker" in navigator) {
       window.addEventListener(
         "load",
