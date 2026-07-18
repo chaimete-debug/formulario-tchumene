@@ -20,10 +20,8 @@
     content="Nazareno Tchumene"
   >
 
-  <!-- Configuração PWA -->
   <link rel="manifest" href="manifest.webmanifest">
 
-  <!-- Ícones -->
   <link
     rel="icon"
     type="image/png"
@@ -37,7 +35,6 @@
     href="icons/apple-touch-icon.png"
   >
 
-  <!-- Configuração para iPhone e iPad -->
   <meta
     name="apple-mobile-web-app-capable"
     content="yes"
@@ -69,6 +66,9 @@
       --primary: #111111;
       --primary-text: #ffffff;
       --secondary: #ffffff;
+      --warning-bg: #fff7df;
+      --warning-border: #d8a500;
+      --warning-text: #533f00;
       --shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
       --radius: 24px;
     }
@@ -218,6 +218,32 @@
       display: none;
     }
 
+    .browser-warning {
+      padding: 16px 17px;
+
+      border: 1px solid var(--warning-border);
+      border-radius: 14px;
+
+      background: var(--warning-bg);
+      color: var(--warning-text);
+
+      font-size: 0.92rem;
+      line-height: 1.55;
+      text-align: left;
+    }
+
+    .browser-warning[hidden] {
+      display: none;
+    }
+
+    .browser-warning strong {
+      display: block;
+      margin-bottom: 5px;
+
+      color: #332800;
+      font-size: 0.98rem;
+    }
+
     .instructions {
       padding: 20px 28px 26px;
 
@@ -355,6 +381,23 @@
           Instalar no telefone
         </button>
 
+        <div
+          id="samsung-warning"
+          class="browser-warning"
+          role="alert"
+          hidden
+        >
+          <strong>
+            Instalação pelo Google Chrome
+          </strong>
+
+          Para evitar avisos de segurança do Google Play Protect,
+          abra esta página no Google Chrome.
+
+          No Chrome, toque nos três pontos e seleccione
+          “Instalar aplicação” ou “Adicionar ao ecrã principal”.
+        </div>
+
         <a
           id="open-form"
           class="button secondary"
@@ -373,11 +416,6 @@
 
       </div>
 
-      <!--
-        Esta secção aparece apenas antes da instalação.
-        Quando a aplicação estiver instalada e for aberta pelo ícone,
-        o JavaScript irá ocultá-la.
-      -->
       <div
         id="install-instructions"
         class="instructions"
@@ -389,8 +427,10 @@
 
         <p>
           <strong>Android:</strong>
-          use o botão “Instalar no telefone”.
-          Quando o botão não aparecer, abra o menu do navegador
+          abra esta página no Google Chrome e use o botão
+          “Instalar no telefone”.
+
+          Quando o botão não aparecer, abra o menu do Chrome
           e seleccione “Instalar aplicação” ou
           “Adicionar ao ecrã principal”.
         </p>
@@ -411,7 +451,6 @@
 
   </main>
 
-  <!-- Janela de instruções para iPhone e iPad -->
   <div
     id="ios-modal"
     class="modal"
@@ -469,6 +508,9 @@
     const instructionsBox =
       document.getElementById("install-instructions");
 
+    const samsungWarning =
+      document.getElementById("samsung-warning");
+
     const iosModal =
       document.getElementById("ios-modal");
 
@@ -477,9 +519,6 @@
 
     let deferredInstallPrompt = null;
 
-    /*
-     * Verifica se a página foi aberta como aplicação instalada.
-     */
     function isApplicationInstalled() {
       return (
         window.matchMedia("(display-mode: standalone)").matches ||
@@ -487,43 +526,47 @@
       );
     }
 
-    /*
-     * Verifica se o equipamento é um iPhone, iPad ou iPod.
-     */
     function isIOSDevice() {
       return /iphone|ipad|ipod/i.test(
         window.navigator.userAgent
       );
     }
 
-    /*
-     * Estado apresentado quando a PWA já está instalada.
-     *
-     * Mantém a mensagem "Aplicação instalada."
-     * e remove todas as instruções de instalação.
-     */
+    function isSamsungInternet() {
+      return /SamsungBrowser/i.test(
+        window.navigator.userAgent
+      );
+    }
+
     function applyInstalledState() {
       installButton.hidden = true;
       instructionsBox.hidden = true;
-      statusText.textContent = "Aplicação instalada.";
+      samsungWarning.hidden = true;
+
+      statusText.textContent =
+        "Aplicação instalada.";
     }
 
-    /*
-     * Estado apresentado quando a página é aberta
-     * directamente no navegador.
-     */
-    function applyBrowserState() {
+    function applySamsungBrowserState() {
+      installButton.hidden = true;
+      instructionsBox.hidden = true;
+      samsungWarning.hidden = false;
+
+      statusText.textContent = "";
+    }
+
+    function applyNormalBrowserState() {
+      samsungWarning.hidden = true;
       instructionsBox.hidden = false;
       statusText.textContent = "";
 
       if (isIOSDevice()) {
         installButton.hidden = false;
+      } else {
+        installButton.hidden = true;
       }
     }
 
-    /*
-     * O navegador informa que a PWA pode ser instalada.
-     */
     window.addEventListener(
       "beforeinstallprompt",
       function (event) {
@@ -531,36 +574,34 @@
 
         deferredInstallPrompt = event;
 
-        if (!isApplicationInstalled()) {
+        if (
+          !isApplicationInstalled() &&
+          !isSamsungInternet()
+        ) {
           installButton.hidden = false;
           instructionsBox.hidden = false;
+          samsungWarning.hidden = true;
         }
       }
     );
 
-    /*
-     * Clique no botão "Instalar no telefone".
-     */
     installButton.addEventListener(
       "click",
       async function () {
 
-        /*
-         * No iPhone e iPad, a instalação é feita
-         * através do menu Partilhar do Safari.
-         */
+        if (isSamsungInternet()) {
+          applySamsungBrowserState();
+          return;
+        }
+
         if (isIOSDevice()) {
           iosModal.hidden = false;
           return;
         }
 
-        /*
-         * Quando o navegador não disponibiliza
-         * o diálogo automático de instalação.
-         */
         if (!deferredInstallPrompt) {
           statusText.textContent =
-            "Use o menu do navegador e escolha " +
+            "Use o menu do Google Chrome e escolha " +
             "“Instalar aplicação” ou " +
             "“Adicionar ao ecrã principal”.";
 
@@ -582,10 +623,6 @@
       }
     );
 
-    /*
-     * Executado quando o navegador confirma
-     * que a aplicação foi instalada.
-     */
     window.addEventListener(
       "appinstalled",
       function () {
@@ -594,9 +631,6 @@
       }
     );
 
-    /*
-     * Fecha a janela de instruções do iPhone/iPad.
-     */
     closeModal.addEventListener(
       "click",
       function () {
@@ -604,10 +638,6 @@
       }
     );
 
-    /*
-     * Fecha a janela quando o utilizador toca
-     * fora da caixa de instruções.
-     */
     iosModal.addEventListener(
       "click",
       function (event) {
@@ -617,18 +647,14 @@
       }
     );
 
-    /*
-     * Define o estado inicial da página.
-     */
     if (isApplicationInstalled()) {
       applyInstalledState();
+    } else if (isSamsungInternet()) {
+      applySamsungBrowserState();
     } else {
-      applyBrowserState();
+      applyNormalBrowserState();
     }
 
-    /*
-     * Detecta alterações para o modo standalone.
-     */
     const standaloneMediaQuery =
       window.matchMedia("(display-mode: standalone)");
 
@@ -655,9 +681,6 @@
       );
     }
 
-    /*
-     * Registo do Service Worker.
-     */
     if ("serviceWorker" in navigator) {
       window.addEventListener(
         "load",
